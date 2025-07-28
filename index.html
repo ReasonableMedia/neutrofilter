@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeutroFilter – Browser-Based Tool (Open Source)</title>
+  <meta name="description" content="NeutroFilter is an open-source browser-based tool that neutralises medically sensitive or legally protected terms into privacy-safe alternatives." />
+  <meta name="author" content="The Reasonable Adjustment - https://thereasonableadjustment.co.uk" />
+</head>
+<body>
+  <h2>NeutroFilter (Browser-Based Tool)</h2>
+  <p>This free tool helps you rephrase health, disability, or legally sensitive language into neutral, privacy-protective alternatives. It runs entirely in your browser. No data is collected or stored.</p>
+
+  <textarea id="inputText" rows="10" placeholder="Paste your message here..." style="width:100%; padding:1rem; font-size:1rem;"></textarea>
+
+  <fieldset style="margin: 1rem 0;">
+    <legend><strong>Filter Categories</strong></legend>
+    <label><input type="checkbox" value="mental_health" checked /> Mental Health</label><br>
+    <label><input type="checkbox" value="neurodivergence" checked /> Neurodivergence</label><br>
+    <label><input type="checkbox" value="physical_health" checked /> Physical Health</label><br>
+    <label><input type="checkbox" value="medication" checked /> Medication & Treatment</label><br>
+    <label><input type="checkbox" value="disability_generic" checked /> Disability (General)</label><br>
+    <label><input type="checkbox" value="rare_conditions" checked /> Rare or Hidden Conditions</label><br>
+    <label><input type="checkbox" value="learning_disabilities" checked /> Learning Disabilities</label><br>
+    <label><input type="checkbox" value="sensory_differences" checked /> Sensory Differences</label><br>
+    <label><input type="checkbox" value="social_determinants" checked /> Social Determinants</label><br>
+  </fieldset>
+
+  <button onclick="applyNeutroFilter()" style="padding:0.5rem 1rem;">Apply NeutroFilter</button>
+  <button onclick="copyOutput()" style="margin-left:0.5rem; padding:0.5rem 1rem;">Copy Clean Text</button>
+
+  <div id="output" style="margin-top:2rem; padding:1rem; background:#fff; border:1px solid #ccc;">
+    <strong>Filtered Output:</strong>
+    <p>(Your rephrased message will appear here)</p>
+  </div>
+
+  <p style="font-size:0.9rem; color:#555; margin-top:2rem;">
+    <strong>Privacy note:</strong> NeutroFilter runs locally in your browser. No input is tracked, saved, or transmitted.
+  </p>
+
+  <footer>
+    <p>NeutroFilter is an open-source project by <a href="https://thereasonableadjustment.co.uk" target="_blank">The Reasonable Adjustment</a></p>
+    <p>Released under the <a href="https://opensource.org/licenses/MIT" target="_blank">MIT License</a></p>
+  </footer>
+
+  <script>
+    const filterCategories = {
+      mental_health: {
+        label: "Mental Health",
+        patterns: [
+          { match: /\b(depression|anxiety|bipolar disorder|ocd|schizophrenia|eating disorder[s]?)\b/gi, replace: "a mental health condition" },
+          { match: /\bi suffer from (.+?)\b/gi, replace: "i experience $1" },
+          { match: /\bdiagnosed with (.+?)\b/gi, replace: "identified with $1" }
+        ]
+      },
+      neurodivergence: {
+        label: "Neurodivergence",
+        patterns: [
+          { match: /\b(autism|autistic|adhd|dyslexia|dyspraxia|tourette'?s)\b/gi, replace: "a neurodevelopmental condition" },
+          { match: /\bi have (.+?)\b/gi, replace: "i have neurodivergent traits" }
+        ]
+      },
+      physical_health: {
+        label: "Physical Health",
+        patterns: [
+          { match: /\b(diabetes|asthma|arthritis|chronic pain|epilepsy|migraine[s]?)\b/gi, replace: "a long-term physical health condition" },
+          { match: /\bi manage (.+?)\b/gi, replace: "i manage a physical condition" }
+        ]
+      },
+      medication: {
+        label: "Medication & Treatment",
+        patterns: [
+          { match: /\bi take (.+?)\b/gi, replace: "i use treatment for a condition" },
+          { match: /\bi[’']?m on (.+?)\b/gi, replace: "i receive ongoing support" }
+        ]
+      },
+      disability_generic: {
+        label: "Disability (General)",
+        patterns: [
+          { match: /\bi am disabled\b/gi, replace: "i have access needs" },
+          { match: /\bregistered disabled\b/gi, replace: "formally recognised as having access needs" }
+        ]
+      },
+      rare_conditions: {
+        label: "Rare or Hidden Conditions",
+        patterns: [
+          { match: /\b(ankylosing spondylitis|ehlers[-\s]?danlos|me\/cfs|chronic fatigue syndrome|long[-\s]?covid|fnd|p[.\s]?o[.\s]?t[.\s]?s|mcas|lupus|fibromyalgia)\b/gi, replace: "a complex or rare condition" },
+          { match: /\bi suffer from (.+?)\b/gi, replace: "i live with a rare condition" }
+        ]
+      },
+      learning_disabilities: {
+        label: "Learning Disabilities",
+        patterns: [
+          { match: /\b(global developmental delay|gdd|cognitive impairment|intellectual disability|learning disability|slow learner)\b/gi, replace: "a learning-related difference" },
+          { match: /\bdifficulty (with|in) learning\b/gi, replace: "a learning-related need" }
+        ]
+      },
+      sensory_differences: {
+        label: "Sensory Differences",
+        patterns: [
+          { match: /\b(hearing loss|deaf|hard of hearing|partially sighted|vision impairment|blind|visual processing issue[s]?)\b/gi, replace: "a sensory access need" },
+          { match: /\bi have (auditory|visual) processing\b/gi, replace: "i have sensory processing needs" }
+        ]
+      },
+      social_determinants: {
+        label: "Social Determinants",
+        patterns: [
+          { match: /\b(history of|experienced) (homelessness|incarceration|prison|trauma|abuse)\b/gi, replace: "a lived experience of social disadvantage" },
+          { match: /\bi (have been|was) in prison\b/gi, replace: "i have experience with the justice system" },
+          { match: /\bi experienced trauma\b/gi, replace: "i have a background that may affect emotional safety" }
+        ]
+      }
+    };
+
+    function applyNeutroFilter() {
+      let input = document.getElementById("inputText").value;
+      let output = input;
+      const selected = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(el => el.value);
+      selected.forEach(cat => {
+        if (filterCategories[cat]) {
+          filterCategories[cat].patterns.forEach(rule => {
+            output = output.replace(rule.match, rule.replace);
+          });
+        }
+      });
+      output = output.charAt(0).toUpperCase() + output.slice(1);
+      document.getElementById("output").innerHTML = "<strong>Filtered Output:</strong><p>" + output + "</p>";
+    }
+
+    function copyOutput() {
+      const div = document.getElementById("output");
+      const temp = document.createElement("textarea");
+      temp.value = div.innerText.replace("Filtered Output:", "").trim();
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("copy");
+      document.body.removeChild(temp);
+      alert("Cleaned text copied to clipboard.");
+    }
+  </script>
+</body>
+</html>
