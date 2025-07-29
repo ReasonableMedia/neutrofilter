@@ -1,6 +1,6 @@
 # NeutroFilter (Open Source)
 
-**NeutroFilter** is a privacy-first, browser-based tool that rephrases health, disability, or legally sensitive language into neutral alternatives. It is designed to help individuals communicate clearly while protecting their dignity and privacy.
+**NeutroFilter** is a privacy-first, browser-based tool that rephrases health, disability, symptom-based, or legally sensitive language into neutral, access-conscious alternatives. It is designed to help individuals communicate clearly while protecting their dignity and privacy.
 
 This tool runs 100% in your browser. No data is tracked, collected, or stored.
 
@@ -9,6 +9,21 @@ This tool runs 100% in your browser. No data is tracked, collected, or stored.
 ## 🌍 Project by  
 **The Reasonable Adjustment**  
 🔗 https://thereasonableadjustment.co.uk
+
+---
+
+## 🧠 Features
+
+- Regex-powered rewording engine
+- Fully client-side JavaScript (no Node.js, no tracking)
+- Built-in filters for:
+  - Mental health
+  - Neurodivergence
+  - Rare/hidden conditions
+  - Physical & gastrointestinal health
+  - Symptom-based experiences
+- Toggle which categories apply to your message
+- Fully self-contained, no setup needed
 
 ---
 
@@ -26,8 +41,18 @@ You are free to use, adapt, and distribute this tool with proper attribution.
 1. Open `neutrofilter.html` in any modern web browser  
 2. Paste your message into the input field  
 3. Select the filter categories you'd like to apply  
-4. Click "Apply NeutroFilter" to clean up sensitive terms  
+4. Click "Apply NeutroFilter" to reword sensitive terms  
 5. Copy your neutralised message with one click
+
+---
+
+## 🧩 Example
+
+**Input:**  
+`I have autism and ulcerative colitis. I struggle with brain fog and anxiety.`
+
+**Output:**  
+`I have neurodivergent traits and a digestive health condition. I experience cognitive access needs and a mental health condition.`
 
 ---
 
@@ -38,9 +63,6 @@ This is our first ever tool. We welcome your input, suggestions, and contributio
 Got ideas or want to help?  
 📧 Contact: [advocacy@thereasonableadjustment.co.uk](mailto:advocacy@thereasonableadjustment.co.uk)
 
+GitHub: https://github.com/ReasonableMedia/neutrofilter
+
 ---
-
-## 🙌 Thank You
-
-NeutroFilter was built with lived experience at its core — and shared in the hope that it helps others feel safer, more confident, and more in control of how they tell their story.
-
